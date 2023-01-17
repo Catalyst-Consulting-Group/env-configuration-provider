@@ -1,0 +1,3 @@
+# CatConsult.EnvConfigurationProvider
+
+WIP
