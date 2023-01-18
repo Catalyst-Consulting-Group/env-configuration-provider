@@ -1,4 +1,4 @@
-namespace CatConsult.EnvConfigurationProvider
+namespace CatConsult.EnvConfigurationProvider.Models
 {
     /// <summary>
     /// Encapsulates a single environment variable to configuration key mapping

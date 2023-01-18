@@ -1,3 +1,4 @@
+using CatConsult.EnvConfigurationProvider.Models;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 
@@ -39,6 +40,44 @@ public class EnvConfigurationProviderTests
         act.Should().Throw<MappingException>()
             .WithMessage("Environment Key: 'MISSING' was not found");
     }
+
+    [Fact]
+    public void Should_Map_Custom_Mapper()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddEnvs(config => config
+                .AddCustomMapper(envs =>
+                    new ConfigurationEntry("Greeting", $"Hello, {envs["FIRST_NAME"]} {envs["LAST_NAME"]}")
+                )
+            )
+            .Build();
+
+        configuration["Greeting"].Should().Be("Hello, John Smith");
+    }
+
+    [Fact]
+    public void Should_Map_Custom_Multi_Mapper()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddEnvs(config => config
+                .AddCustomMultiMapper(envs =>
+                    new[]
+                    {
+                        new ConfigurationEntry("Greetings:English", $"Hello, {envs["FIRST_NAME"]} {envs["LAST_NAME"]}"),
+                        new ConfigurationEntry("Greetings:French", $"Bonjour, {envs["FIRST_NAME"]} {envs["LAST_NAME"]}"),
+                    }
+                )
+            )
+            .Build();
+
+        var greetings = configuration.GetSection("Greetings").Get<GreetingOptions>();
+
+        greetings.Should().BeEquivalentTo(new GreetingOptions
+        {
+            English = "Hello, John Smith",
+            French = "Bonjour, John Smith"
+        });
+    }
 }
 
 public class FooOptions
@@ -50,4 +89,11 @@ public class FooOptions
     public string OptionalWithDefault { get; set; } = "DefaultValue";
 
     public string? OptionalWithNull { get; set; }
+}
+
+public class GreetingOptions
+{
+    public required string English { get; set; }
+
+    public required string French { get; set; }
 }

@@ -22,5 +22,19 @@ namespace CatConsult.EnvConfigurationProvider
         /// <param name="defaultValue">A default value that will be set if the environment variable is not found. Defaults to null</param>
         /// <returns>An <see cref="IEnvConfigurationProviderBuilder"/> for chaining further calls</returns>
         IEnvConfigurationProviderBuilder AddOptionalEnv(string env, string configurationKey, string defaultValue = null);
+
+        /// <summary>
+        /// Adds a custom environment variable mapper to the provider
+        /// </summary>
+        /// <param name="mapper">A <see cref="CustomEnvMapper"/> delegate</param>
+        /// <returns>An <see cref="IEnvConfigurationProviderBuilder"/> for chaining further calls</returns>
+        IEnvConfigurationProviderBuilder AddCustomMapper(CustomEnvMapper mapper);
+
+        /// <summary>
+        /// Adds a custom environment variable multi-mapper to the provider
+        /// </summary>
+        /// <param name="mapper">A <see cref="CustomEnvMultiMapper"/> delegate</param>
+        /// <returns>An <see cref="IEnvConfigurationProviderBuilder"/> for chaining further calls</returns>
+        IEnvConfigurationProviderBuilder AddCustomMultiMapper(CustomEnvMultiMapper mapper);
     }
 }

@@ -1,3 +1,5 @@
+using CatConsult.EnvConfigurationProvider.Models;
+
 namespace CatConsult.EnvConfigurationProvider
 {
     public class EnvConfigurationProviderBuilder : IEnvConfigurationProviderBuilder
@@ -11,7 +13,7 @@ namespace CatConsult.EnvConfigurationProvider
 
         public IEnvConfigurationProviderBuilder AddRequiredEnv(string env, string configurationKey)
         {
-            _provider.Mappings.Add(new EnvMapping
+            _provider.AddMapping(new EnvMapping
             {
                 Env = env,
                 ConfigurationKey = configurationKey,
@@ -23,12 +25,26 @@ namespace CatConsult.EnvConfigurationProvider
 
         public IEnvConfigurationProviderBuilder AddOptionalEnv(string env, string configurationKey, string defaultValue = null)
         {
-            _provider.Mappings.Add(new EnvMapping
+            _provider.AddMapping(new EnvMapping
             {
                 Env = env,
                 ConfigurationKey = configurationKey,
                 DefaultValue = defaultValue,
             });
+
+            return this;
+        }
+
+        public IEnvConfigurationProviderBuilder AddCustomMapper(CustomEnvMapper mapper)
+        {
+            _provider.AddCustomMapper(mapper);
+
+            return this;
+        }
+
+        public IEnvConfigurationProviderBuilder AddCustomMultiMapper(CustomEnvMultiMapper mapper)
+        {
+            _provider.AddCustomMultiMapper(mapper);
 
             return this;
         }

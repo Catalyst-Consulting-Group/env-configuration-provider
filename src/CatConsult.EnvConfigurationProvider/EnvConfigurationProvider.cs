@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CatConsult.EnvConfigurationProvider.Models;
 using DotNetEnv;
 using Microsoft.Extensions.Configuration;
 
@@ -6,13 +7,28 @@ namespace CatConsult.EnvConfigurationProvider
 {
     public class EnvConfigurationProvider : ConfigurationProvider
     {
-        public List<EnvMapping> Mappings { get; } = new List<EnvMapping>();
+        private readonly List<EnvMapping> _envMappings = new List<EnvMapping>();
+        private readonly List<CustomEnvMapper> _customEnvMappers = new List<CustomEnvMapper>();
+        private readonly List<CustomEnvMultiMapper> _customEnvMultiMappers = new List<CustomEnvMultiMapper>();
+
+        public void AddMapping(EnvMapping mapping) => _envMappings.Add(mapping);
+
+        public void AddCustomMapper(CustomEnvMapper mapper) => _customEnvMappers.Add(mapper);
+
+        public void AddCustomMultiMapper(CustomEnvMultiMapper mapper) => _customEnvMultiMappers.Add(mapper);
 
         public override void Load()
         {
             var envs = Env.TraversePath().Load().ToDictionary();
 
-            foreach (var mapping in Mappings)
+            ProcessEnvMappings(envs);
+            ProcessCustomEnvMappers(envs);
+            ProcessCustomEnvMultiMappers(envs);
+        }
+
+        private void ProcessEnvMappings(IReadOnlyDictionary<string, string> envs)
+        {
+            foreach (var mapping in _envMappings)
             {
                 var found = envs.TryGetValue(mapping.Env, out var value);
 
@@ -27,6 +43,29 @@ namespace CatConsult.EnvConfigurationProvider
                 }
 
                 Data[mapping.ConfigurationKey] = value;
+            }
+        }
+
+        private void ProcessCustomEnvMappers(IReadOnlyDictionary<string, string> envs)
+        {
+            foreach (var mapper in _customEnvMappers)
+            {
+                AddEntry(mapper(envs));
+            }
+        }
+
+        private void AddEntry(ConfigurationEntry entry) => Data[entry.Key] = entry.Value;
+
+        private void ProcessCustomEnvMultiMappers(IReadOnlyDictionary<string, string> envs)
+        {
+            foreach (var mapper in _customEnvMultiMappers)
+            {
+                var entries = mapper(envs);
+
+                foreach (var entry in entries)
+                {
+                    AddEntry(entry);
+                }
             }
         }
     }
