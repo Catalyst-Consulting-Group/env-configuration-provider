@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using CatConsult.EnvConfigurationProvider.Models;
 using DotNetEnv;
 using Microsoft.Extensions.Configuration;
@@ -19,8 +22,22 @@ namespace CatConsult.EnvConfigurationProvider
 
         public override void Load()
         {
-            var envs = Env.TraversePath().Load().ToDictionary();
+            var envs = Env
+                .NoClobber()
+                .NoEnvVars()
+                .TraversePath()
+                .Load()
+                .ToDictionary();
 
+            var systemEnvs = Environment.GetEnvironmentVariables()
+                .Cast<DictionaryEntry>()
+                .Select(e => new KeyValuePair<string, string>((string)e.Key, (string)e.Value));
+
+            foreach (var env in systemEnvs)
+            {
+                envs[env.Key] = env.Value;
+            }
+            
             ProcessEnvMappings(envs);
             ProcessCustomEnvMappers(envs);
             ProcessCustomEnvMultiMappers(envs);

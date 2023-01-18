@@ -30,6 +30,34 @@ public class EnvConfigurationProviderTests
     }
 
     [Fact]
+    public void Should_Map_Envs_From_Operating_System()
+    {
+        Environment.SetEnvironmentVariable("FOOBAR_TEST_ENV", "Testing");
+        
+        var configuration = new ConfigurationBuilder()
+            .AddEnvs(config => config
+                .AddRequiredEnv("FOOBAR_TEST_ENV", "Foobar")
+            )
+            .Build();
+
+        configuration["Foobar"].Should().Be("Testing");
+    }
+    
+    [Fact]
+    public void Should_Not_Override_Envs_From_Operating_System()
+    {
+        Environment.SetEnvironmentVariable("OVERRIDE_ME", "bar");
+        
+        var configuration = new ConfigurationBuilder()
+            .AddEnvs(config => config
+                .AddRequiredEnv("OVERRIDE_ME", "OverrideMe")
+            )
+            .Build();
+
+        configuration["OverrideMe"].Should().Be("bar");
+    }
+
+    [Fact]
     public void Should_Throw_On_Missing_Required_Envs()
     {
         var act = () =>
