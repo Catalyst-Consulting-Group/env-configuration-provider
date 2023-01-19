@@ -1,0 +1,15 @@
+name: Pull Request Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: pr_test
+    uses: ./.github/workflows/run-tests.yml
