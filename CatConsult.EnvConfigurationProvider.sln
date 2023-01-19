@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{7047ED6A-11A2-4C9A-AD66-9E770D55071C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSample", "samples\WebSample\WebSample.csproj", "{9F9F4745-F773-447C-A886-8DB6C4540A40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,9 +41,14 @@ Global
 		{078157B6-A1DF-41E3-9E7B-E3F429A90AC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{078157B6-A1DF-41E3-9E7B-E3F429A90AC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{078157B6-A1DF-41E3-9E7B-E3F429A90AC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F9F4745-F773-447C-A886-8DB6C4540A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F9F4745-F773-447C-A886-8DB6C4540A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F9F4745-F773-447C-A886-8DB6C4540A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F9F4745-F773-447C-A886-8DB6C4540A40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6121433A-8231-4B65-98D1-8C07F1DFCE66} = {7A131B97-B481-4370-9914-E662E5D55B81}
 		{078157B6-A1DF-41E3-9E7B-E3F429A90AC1} = {353AEB54-70B9-4E9D-BACD-BAA62121DD97}
+		{9F9F4745-F773-447C-A886-8DB6C4540A40} = {7047ED6A-11A2-4C9A-AD66-9E770D55071C}
 	EndGlobalSection
 EndGlobal
