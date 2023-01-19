@@ -9,20 +9,18 @@ namespace CatConsult.EnvConfigurationProvider
         /// <summary>
         /// Adds an <see cref="EnvConfigurationProvider"/> that reads configuration values from a .env file and the operating system
         /// </summary>
-        /// <param name="builder">The <see cref="IConfigurationBuilder"/> to add to</param>
-        /// <param name="configureProvider">An action that provides an <see cref="IEnvConfigurationProviderBuilder"/> for chaining provider configuration</param>
+        /// <param name="configurationBuilder">The <see cref="IConfigurationBuilder"/> to add to</param>
+        /// <param name="config">An action that provides an <see cref="IEnvConfigurationBuilder"/> for chaining provider configuration</param>
         /// <returns>The <see cref="IConfigurationBuilder"/></returns>
-        public static IConfigurationBuilder AddEnvs(this IConfigurationBuilder builder, Action<IEnvConfigurationProviderBuilder> configureProvider)
+        public static IConfigurationBuilder AddEnvs(this IConfigurationBuilder configurationBuilder, Action<IEnvConfigurationBuilder> config)
         {
             var provider = new EnvConfigurationProvider();
+            var source = new EnvConfigurationSource(provider);
 
-            builder.Add(
-                new EnvConfigurationSource(provider)
-            );
+            var builder = new EnvConfigurationBuilder(provider);
+            config(builder);
 
-            configureProvider(new EnvConfigurationProviderBuilder(provider));
-
-            return builder;
+            return configurationBuilder.Add(source);
         }
     }
 }
