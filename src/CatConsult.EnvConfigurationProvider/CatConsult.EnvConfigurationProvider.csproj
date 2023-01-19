@@ -2,6 +2,21 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+
+        <PackageId>CatConsult.EnvConfigurationProvider</PackageId>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/Catalyst-Consulting-Group/env-configuration-provider</PackageProjectUrl>
+        <PackageTags>Configuration</PackageTags>
+
+        <Description>
+            A .NET Configuration Provider that offers a fluent API for loading and transforming environment variables from the OS and .env files
+        </Description>
+        <Authors>Derek McKinnon</Authors>
+        <Company>Catalyst Consulting Group, Inc.</Company>
+        
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
@@ -9,4 +24,7 @@
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 </Project>
