@@ -37,7 +37,7 @@ namespace CatConsult.EnvConfigurationProvider
             {
                 envs[env.Key] = env.Value;
             }
-            
+
             ProcessEnvMappings(envs);
             ProcessCustomEnvMappers(envs);
             ProcessCustomEnvMultiMappers(envs);
@@ -59,7 +59,10 @@ namespace CatConsult.EnvConfigurationProvider
                     value = mapping.DefaultValue;
                 }
 
-                Data[mapping.ConfigurationKey] = value;
+                if (mapping.Condition == null || mapping.Condition(value))
+                {
+                    Data[mapping.ConfigurationKey] = value;
+                }
             }
         }
 

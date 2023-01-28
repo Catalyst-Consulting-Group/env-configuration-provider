@@ -70,6 +70,29 @@ public class EnvConfigurationProviderTests
     }
 
     [Fact]
+    public void Should_Map_Conditional_Envs()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddEnvs(config => config
+                .AddRequiredEnv("FIRST_NAME", "FirstName1", env => env.StartsWith("J"))
+                .AddOptionalEnv("MIDDLE_NAME", "MiddleName1", env => !string.IsNullOrEmpty(env))
+                .AddRequiredEnv("LAST_NAME", "LastName1", env => env.StartsWith("S"))
+                .AddRequiredEnv("FIRST_NAME", "FirstName2", env => env.StartsWith("F"))
+                .AddOptionalEnv("MIDDLE_NAME", "MiddleName2", _ => true, "Foobar")
+                .AddRequiredEnv("LAST_NAME", "LastName2", env => env.StartsWith("B"))
+            )
+            .Build();
+
+        configuration["FirstName1"].Should().Be("John");
+        configuration["MiddleName1"].Should().BeNull();
+        configuration["LastName1"].Should().Be("Smith");
+
+        configuration["FirstName2"].Should().BeNull();
+        configuration["MiddleName2"].Should().Be("Foobar");
+        configuration["FirstName2"].Should().BeNull();
+    }
+
+    [Fact]
     public void Should_Map_Custom_Mapper()
     {
         var configuration = new ConfigurationBuilder()
