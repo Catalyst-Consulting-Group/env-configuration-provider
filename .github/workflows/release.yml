@@ -1,0 +1,31 @@
+name: Publish to NuGet
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-dotnet@v3
+        with:
+          global-json-file: ./global.json
+
+      - run: dotnet restore
+      - run: dotnet build --no-restore
+
+      - run: |
+          dotnet pack src/CatConsult.EnvConfigurationProvider \
+            -p:PackageVersion="$GITHUB_REF_NAME" \
+            --no-build \
+            --output "$RUNNER_TEMP/output"
+
+      - env:
+          API_KEY: ${{ secrets.CATCONSULT_NUGET_API_KEY }}
+        run: |
+          dotnet nuget push "$RUNNER_TEMP/output/*.nupkg" \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key "$API_KEY"
