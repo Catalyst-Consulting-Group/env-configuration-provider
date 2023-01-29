@@ -45,6 +45,13 @@ if (builder.Environment.IsDevelopment())
 In this example taken from the [Web Sample](samples/WebSample/Program.cs), we are adding a required env, an optional env with a default value,
 and a custom mapping function that pulls multiple envs at once to build a connection string.
 
+`AddRequiredEnv` and `AddOptionalEnv` both come with overloads that allow a conditional function to determine if the variable should be loaded into configuration.
+This can be useful if you want to prevent clobbering other providers' values if they are already set.
+
 You can chain as many functions as you want. If you are concerned about this cluttering up your `Program.cs`, you can create a custom
 extension method in your project that performs the configuration. See the [Web Sample](samples/WebSample/Configuration/ConfigurationExtensions.cs)
 for an example.
+
+You can also create custom extension methods for `IEnvConfigurationBuilder` that can encapsulate custom logic. For example, 
+if multiple projects need access to the same connection string, you could write an extension method that wraps the `AddCustomMapper` function above
+and share it in a common class library.
