@@ -1,3 +1,4 @@
+using System;
 using CatConsult.EnvConfigurationProvider.Models;
 
 namespace CatConsult.EnvConfigurationProvider
@@ -11,28 +12,55 @@ namespace CatConsult.EnvConfigurationProvider
             _provider = provider;
         }
 
+        public IEnvConfigurationBuilder AddEnv(EnvMapping mapping)
+        {
+            _provider.AddMapping(mapping);
+
+            return this;
+        }
+
         public IEnvConfigurationBuilder AddRequiredEnv(string env, string configurationKey)
         {
-            _provider.AddMapping(new EnvMapping
+            return AddEnv(new EnvMapping
             {
                 Env = env,
                 ConfigurationKey = configurationKey,
                 IsRequired = true,
             });
+        }
 
-            return this;
+        public IEnvConfigurationBuilder AddRequiredEnv(string env, string configurationKey, Func<string, bool> condition)
+        {
+            return AddEnv(new EnvMapping
+            {
+                Env = env,
+                ConfigurationKey = configurationKey,
+                IsRequired = true,
+                Condition = condition,
+            });
         }
 
         public IEnvConfigurationBuilder AddOptionalEnv(string env, string configurationKey, string defaultValue = null)
         {
-            _provider.AddMapping(new EnvMapping
+            return AddEnv(new EnvMapping
             {
                 Env = env,
                 ConfigurationKey = configurationKey,
+                IsRequired = false,
                 DefaultValue = defaultValue,
             });
+        }
 
-            return this;
+        public IEnvConfigurationBuilder AddOptionalEnv(string env, string configurationKey, Func<string, bool> condition, string defaultValue = null)
+        {
+            return AddEnv(new EnvMapping
+            {
+                Env = env,
+                ConfigurationKey = configurationKey,
+                IsRequired = false,
+                DefaultValue = defaultValue,
+                Condition = condition,
+            });
         }
 
         public IEnvConfigurationBuilder AddCustomMapper(CustomEnvMapper mapper)

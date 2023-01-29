@@ -1,3 +1,5 @@
+using System;
+
 namespace CatConsult.EnvConfigurationProvider.Models
 {
     /// <summary>
@@ -24,5 +26,10 @@ namespace CatConsult.EnvConfigurationProvider.Models
         /// An default value that will be supplied for an optional environment variable that is not found
         /// </summary>
         public string DefaultValue { get; set; }
+
+        /// <summary>
+        /// A function that should return true to bind the environment variable to the configuration or false to ignore it 
+        /// </summary>
+        public Func<string, bool> Condition { get; set; }
     }
 }
